@@ -1116,12 +1116,12 @@ public static unsafe partial class ClassInjector
         var klass = UnityVersionHandler.Wrap((Il2CppClass*)IL2CPP.il2cpp_class_from_type((IntPtr)typePointer));
         var assembly = UnityVersionHandler.Wrap(UnityVersionHandler.Wrap(klass.Image).Assembly);
         var fullName = new StringBuilder();
-        var names = new List<string>();
+        var names = new Stack<string>();
         var declaringType = klass;
         var outerType = klass;
         do
         {
-            names.Add(Marshal.PtrToStringUTF8(declaringType.Name) ?? "");
+            names.Push(Marshal.PtrToStringUTF8(declaringType.Name) ?? "");
             outerType = declaringType;
         }
         while ((declaringType = UnityVersionHandler.Wrap(declaringType.DeclaringType)) != default);
@@ -1129,7 +1129,6 @@ public static unsafe partial class ClassInjector
 
         fullName.Append(namespaceName);
         fullName.Append('.');
-        names.Reverse();
         fullName.Append(string.Join("+", names));
 
         var assemblyName = Marshal.PtrToStringUTF8(assembly.Name.Name);
