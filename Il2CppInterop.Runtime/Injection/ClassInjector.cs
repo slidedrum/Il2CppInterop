@@ -1128,7 +1128,8 @@ public static unsafe partial class ClassInjector
         var namespaceName = outerType.Namespace != IntPtr.Zero ? Marshal.PtrToStringUTF8(outerType.Namespace) ?? "" : "";
 
         fullName.Append(namespaceName);
-        fullName.Append('.');
+        if (namespaceName.Length > 0)
+            fullName.Append('.');
         fullName.Append(string.Join("+", names));
 
         var assemblyName = Marshal.PtrToStringUTF8(assembly.Name.Name);
